@@ -1,0 +1,11 @@
+#!/bin/bash
+
+function _bash_cached_completions {
+	COMPREPLY=()
+	words=`cached-completion "$COMP_CWORD" "${COMP_WORDS[@]}" 2>/tmp/cache_completions.log`
+	COMPREPLY=( $(compgen -W "${words}" -- ${COMP_WORDS[COMP_CWORD]}) )
+	return 0
+}
+
+#example:
+# complete -f -F _bash_cached_completions my-function

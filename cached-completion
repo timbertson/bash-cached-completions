@@ -1,0 +1,94 @@
+#!/usr/bin/env python
+import os
+import shutil
+import imp
+import time
+import fcntl
+import sys
+
+base_dir = os.path.expanduser('~/.config/bashcomplete')
+cache_dir = os.path.join('/tmp/', 'completion_caches')
+
+# USAGE:
+# put a script in ~/.config/bashcomplete/<command_name>.py
+# set "max_age" (in seconds)
+# def "cache_key(command, args)"
+# def "get_words(command, args)"
+# add to ~/.bashrc:
+# complete -f -F _python_cache_complete svndiff
+
+def make_dir(path):
+	if not os.path.exists(path):
+		os.mkdir(path)
+
+def get_words(command, args):
+	make_dir(base_dir)
+	make_dir(cache_dir)
+
+	config_path = os.path.join(base_dir, command + '.py')
+	f = open(config_path)
+	config = None
+	try:
+		config = imp.load_module('config', f, config_path, ('.py','r', imp.PY_SOURCE))
+	finally:
+		f.close()
+	
+	get_cache_key = getattr(config, 'cache_key', lambda *a: 'root')
+	cache_key = get_cache_key(command, args)
+	max_age = getattr(config, 'max_age', 60 * 60 * 24)
+	get_words = config.get_words
+
+	cached_words_path = os.path.join(cache_dir, command, cache_key)
+	try:
+		lastmod = os.stat(cached_words_path).st_mtime
+	except OSError:
+		lastmod = 0
+
+	if not os.path.exists(cached_words_path):
+		make_dir(cache_dir)
+		make_dir(os.path.join(cache_dir, command))
+		open(cached_words_path, 'w').close()
+	
+	words = get_cached_words(cached_words_path)
+
+	if lastmod + max_age < time.ctime():
+		child_pid = os.fork()
+		if child_pid == 0:
+			# close off stdout so bash doesn't wait for this child
+			sys.stdout.close()
+			os.close(1)
+			sys.stdout = sys.stderr
+			f = open(cached_words_path + '.lck', 'w')
+			try:
+				fcntl.flock(f.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+			except IOError: os._exit(1)
+			print "%s: GOT LOCK" % (os.getpid(),)
+			new_words = get_words(command, args)
+			output = open(cached_words_path, 'w')
+			output.writelines((line + '\n' for line in new_words))
+			output.close()
+			f.close()
+			os._exit(0)
+	
+	print >> sys.stderr, repr(words)
+	return words or []
+
+
+def get_cached_words(path):
+	if not os.path.exists(path): return None
+	try:
+		f = open(path)
+		result = f.readlines()
+		f.close()
+		return result
+	except StandardError:
+		return None
+
+def main(idx, command, *args):
+	idx = int(idx) - 1
+	args = args[:idx+1]
+	words = get_words(command, args)
+	print "".join(words)
+
+if __name__ == '__main__':
+	sys.exit(main(*sys.argv[1:]))
