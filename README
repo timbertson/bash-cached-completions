@@ -32,4 +32,14 @@ To enable completions for "my-command":
 -----------------------------------------
 ~/.bashrc:
 
-	complete -f -F _bash_cached_completions my-command
+	export PATH="$PATH:/path/to/bashcomplete"
+	. /path/to/bashcomplete/init
+
+
+(Or, if you're using 0install) :
+
+-----------------------------------------
+~/.bashrc:
+
+	. `g='http://gfxmonk.net/dist/0install'; 0launch "$g/0find.xml" "$g/bashcomplete.xml"`/0init
+

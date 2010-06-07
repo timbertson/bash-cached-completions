@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type='text/xsl' href='interface.xsl'?>
+<interface uri="http://gfxmonk.net/dist/0install/bashcomplete.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
+  <name>bashcomplete</name>
+  <summary>cached completions for bash</summary>
+  <description>
+  </description>
+
+  <group main="cached-completion">
+    <requires interface="http://gfxmonk.net/dist/0install/0find.xml"/>
+
+    <implementation id="sha1new=2e7fc5ff211ce36d790d02b9e28ef44f8a1200e2" released="2010-06-13" version="0.1">
+    
+      <manifest-digest sha256="ae283f8e5ed41f084650465948b81a2221b77a9c2413f65e8967350882c881bc"/>
+      <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.tgz" size="1398"/>
+    </implementation>
+  </group>
+</interface>

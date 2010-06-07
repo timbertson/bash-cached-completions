@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function _bash_cached_completions {
+	COMPREPLY=()
+	words=`0launch 'http://gfxmonk.net/dist/0install/bashcomplete.xml' "$COMP_CWORD" "${COMP_WORDS[@]}" 2>/tmp/cache_completions.log`
+	COMPREPLY=( $(compgen -W "${words}" -- ${COMP_WORDS[COMP_CWORD]}) )
+	return 0
+}
+
+function _init_cached_completions {
+	for f in ~/.config/bashcomplete/*.py; do
+		local filename command
+		filename=${f##*/}
+		command=${filename/%.py/}
+		complete -f -F _bash_cached_completions $command
+	done
+}
+
+_init_cached_completions
