@@ -91,4 +91,9 @@ def main(idx, command, *args):
 	print "".join(words)
 
 if __name__ == '__main__':
+	if sys.argv[1:] == ['__init']:
+		init_script = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), 'init'))
+		completion_script = os.path.abspath(sys.argv[0])
+		print "%s %s" % (init_script, completion_script)
+		sys.exit(0)
 	sys.exit(main(*sys.argv[1:]))

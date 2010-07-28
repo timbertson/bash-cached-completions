@@ -1,19 +1,25 @@
 #!/bin/bash
 
-function _bash_cached_completions {
-	COMPREPLY=()
-	words=`cached-completion "$COMP_CWORD" "${COMP_WORDS[@]}" 2>/tmp/cache_completions.log`
-	COMPREPLY=( $(compgen -W "${words}" -- ${COMP_WORDS[COMP_CWORD]}) )
-	return 0
-}
+if [ -z "$1" ]; then
+	echo "ERROR: please supply a path to the cached-completion init script" 1>&2
+else
+	_bash_cached_completions_script="$1"
+	function _bash_cached_completions {
+		COMPREPLY=()
+		words=$(${_bash_cached_completions_script} "$COMP_CWORD" "${COMP_WORDS[@]}" 2>/tmp/cache_completions.log)
+		COMPREPLY=( $(compgen -W "${words}" -- ${COMP_WORDS[COMP_CWORD]}) )
+		return 0
+	}
 
-function _init_cached_completions {
-	for f in ~/.config/bashcomplete/*.py; do
-		local filename command
-		filename=${f##*/}
-		command=${filename/%.py/}
-		complete -f -F _bash_cached_completions $command
-	done
-}
+	[ -n "$bash_cached_completions_dir" ] || bash_cached_completions_dir=~/.config/bashcomplete
+	function _bash_cached_completions_init {
+		for f in $bash_cached_completions_dir/*.py; do
+			local filename command
+			filename=${f##*/}
+			command=${filename/%.py/}
+			complete -f -F _bash_cached_completions $command
+		done
+	}
 
-_init_cached_completions
+	_bash_cached_completions_init
+fi
