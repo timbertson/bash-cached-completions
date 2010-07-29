@@ -5,17 +5,10 @@ import imp
 import time
 import fcntl
 import sys
+from base64 import b32encode
 
-base_dir = os.path.expanduser('~/.config/bashcomplete')
+base_dir = os.environ.get('bash_cached_completions_dir') or os.path.expanduser('~/.config/bashcomplete')
 cache_dir = os.path.join('/tmp/', 'completion_caches')
-
-# USAGE:
-# put a script in ~/.config/bashcomplete/<command_name>.py
-# set "max_age" (in seconds)
-# def "cache_key(command, args)"
-# def "get_words(command, args)"
-# add to ~/.bashrc:
-# complete -f -F _python_cache_complete svndiff
 
 def make_dir(path):
 	if not os.path.exists(path):
@@ -38,7 +31,7 @@ def get_words(command, args):
 	max_age = getattr(config, 'max_age', 60 * 60 * 24)
 	get_words = config.get_words
 
-	cached_words_path = os.path.join(cache_dir, command, cache_key)
+	cached_words_path = os.path.join(cache_dir, command, b32encode(cache_key))
 	try:
 		lastmod = os.stat(cached_words_path).st_mtime
 	except OSError:
@@ -62,7 +55,6 @@ def get_words(command, args):
 			try:
 				fcntl.flock(f.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
 			except IOError: os._exit(1)
-			print "%s: GOT LOCK" % (os.getpid(),)
 			new_words = get_words(command, args)
 			output = open(cached_words_path, 'w')
 			output.writelines((line + '\n' for line in new_words))

@@ -4,39 +4,37 @@
 	<name>bash-cached-completions</name>
 	<summary>cached completions for bash</summary>
 	<description>
-		To enable, put the following in your bashrc:
-		
-		. $(0launch http://gfxmonk.net/dist/0install/bashcomplete.xml __init)
+To enable, put the following in your bashrc:
 
-		An easy way to generate a set of bash completion words.
-		Word sets are cached, and generated in the background (so
-		your terminal doesn't hang).
+. $(0launch http://gfxmonk.net/dist/0install/bashcomplete.xml __init)
 
-		The config is all written in python, because python is ace.
-		Every set of words is tied to the cache_key you generate -
-		if you return the same cache_key, the completion will re-use
-		the same set of words. If completion depends on existing
-		arguments, you will need to factor that into your cache_key
-		generation. Cache_keys need to be valid filenames, so
-		b32encode can be useful.
+An easy way to generate a set of bash completion words.
+Word sets are cached, and generated in the background (so
+your terminal doesn't hang).
 
-		Example setup:
-		To enable completions for &quot;my-command&quot;:
+The config is all written in python, because python is ace.
+Every set of words is tied to the cache_key you generate -
+if you return the same cache_key, the completion will re-use
+the same set of words. If completion depends on existing
+arguments, you will need to factor that into your cache_key
+generation.
 
-		-----------------------------------------
-		~/.config/bashcomplete/my-command.py:
+Example setup:
+To enable completions for &quot;my-command&quot;:
 
-			max_age = 5 * 60 # 5 minutes
+-----------------------------------------
+~/.config/bashcomplete/my-command.py:
 
-			def cache_key(command, args):
-				import os
-				import base64
-				return base64.b32encode(os.getcwd())
+	max_age = 5 * 60 # 5 minutes
 
-			def get_words(command, args):
-				import time
-				time.sleep(2) # won't lock bash
-				return ['aaa','bbbb','cccc', 'ccdd']
+	def cache_key(command, args):
+		import os
+		return os.getcwd()
+
+	def get_words(command, args):
+		import time
+		time.sleep(2) # won't lock bash
+		return ['aaa','bbbb','cccc', 'ccdd']
 	</description>
 
 	<group main="cached-completion">
@@ -47,6 +45,10 @@
 		<implementation id="sha1new=3f917886660e0a3db895dd9e059fe1581aef010d" released="2010-07-28" version="0.1.1">
     <manifest-digest sha256="541aac253c4072458447add5350837c4734e20b0c2feffc8ad06ae1136eff1af"/>
     <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.1.tgz" size="1489"/>
+  </implementation>
+		<implementation id="sha1new=f4fa7bdf5d6f78a8a37ae578336aa1a213cd3977" released="2010-07-29" version="0.1.2">
+    <manifest-digest sha256="0db35e7584e1a6a224742a95e586bdaed3295b736ccbc6221368afe2085c6095"/>
+    <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.2.tgz" size="1429"/>
   </implementation>
 	</group>
 </interface>

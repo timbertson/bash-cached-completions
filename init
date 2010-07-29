@@ -3,6 +3,7 @@
 if [ -z "$1" ]; then
 	echo "ERROR: please supply a path to the cached-completion init script" 1>&2
 else
+	[ -n "$2" ] && bash_cached_completions_dir="$2"
 	_bash_cached_completions_script="$1"
 	function _bash_cached_completions {
 		COMPREPLY=()
