@@ -13,6 +13,7 @@ else
 	}
 
 	[ -n "$bash_cached_completions_dir" ] || bash_cached_completions_dir=~/.config/bashcomplete
+	export bash_cached_completions_dir
 	function _bash_cached_completions_init {
 		for f in $bash_cached_completions_dir/*.py; do
 			local filename command
