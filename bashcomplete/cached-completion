@@ -7,7 +7,7 @@ import fcntl
 import sys
 from base64 import b32encode
 
-base_dir = os.environ.get('bash_cached_completions_dir') or os.path.expanduser('~/.config/bashcomplete')
+base_dir = os.environ.get('bash_cached_completions_dir')
 cache_dir = os.path.join('/tmp/', 'completion_caches')
 
 def make_dir(path):
@@ -21,6 +21,8 @@ def get_words(command, args):
 	config_path = os.path.join(base_dir, command + '.py')
 	f = open(config_path)
 	config = None
+	sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+	sys.path.insert(0, config_path)
 	try:
 		config = imp.load_module('config', f, config_path, ('.py','r', imp.PY_SOURCE))
 	finally:

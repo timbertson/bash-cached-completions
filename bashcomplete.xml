@@ -55,4 +55,10 @@ To enable completions for &quot;my-command&quot;:
     <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.3.tgz" size="1438"/>
   </implementation>
 	</group>
+	<group main="bashcomplete/cached-completion">
+    <implementation id="sha1new=2a96664db81de4f29c058b6db1c0b5ff718bc391" released="2010-08-07" version="0.1.4">
+      <manifest-digest sha256="36ebdc8a01da596e4190bc11bf381c355bfc1dd04ff772827548dcd8d9d8b44c"/>
+      <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.4.tgz" size="1956"/>
+    </implementation>
+	</group>
 </interface>

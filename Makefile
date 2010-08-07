@@ -1,2 +1,2 @@
 package:
-	mkzero-gfxmonk -p cached-completion -p init bashcomplete.xml -v `cat VERSION`
+	mkzero-gfxmonk -p bashcomplete bashcomplete.xml -v `cat VERSION`
