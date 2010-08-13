@@ -7,8 +7,8 @@ import fcntl
 import sys
 from base64 import b32encode
 
-base_dir = os.environ.get('bash_cached_completions_dir')
-cache_dir = os.path.join('/tmp/', 'completion_caches')
+base_dir = os.environ.get('bashcomplete_config_dir')
+cache_dir = os.path.join('/tmp/', 'bashcomplete_cache')
 
 def make_dir(path):
 	if not os.path.exists(path):
@@ -31,6 +31,7 @@ def get_words(command, args):
 	get_cache_key = getattr(config, 'cache_key', lambda *a: 'root')
 	cache_key = get_cache_key(command, args)
 	max_age = getattr(config, 'max_age', 60 * 60 * 24)
+	blocking = getattr(config, 'blocking', False)
 	get_words = config.get_words
 
 	cached_words_path = os.path.join(cache_dir, command, b32encode(cache_key))
@@ -46,9 +47,10 @@ def get_words(command, args):
 	
 	words = get_cached_words(cached_words_path)
 
-	if lastmod + max_age < time.ctime():
+	if lastmod + max_age < time.time():
 		child_pid = os.fork()
 		if child_pid == 0:
+			print >> sys.stderr, "generating new set of words"
 			# close off stdout so bash doesn't wait for this child
 			sys.stdout.close()
 			os.close(1)
@@ -63,6 +65,10 @@ def get_words(command, args):
 			output.close()
 			f.close()
 			os._exit(0)
+		if blocking:
+			print >> sys.stderr, "waiting"
+			os.waitpid(child_pid, 0)
+			words = get_cached_words(cached_words_path)
 	
 	print >> sys.stderr, repr(words)
 	return words or []

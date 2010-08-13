@@ -35,6 +35,12 @@ To enable completions for &quot;my-command&quot;:
 		import time
 		time.sleep(2) # won't lock bash
 		return ['aaa','bbbb','cccc', 'ccdd']
+-----------------------------------------
+
+you can also set &quot;blocking = True&quot; in your config script if you always
+want bash to wait while new completions are being generated. WARNING: this
+will lock up your shell until the completions are retrieved, so you should
+only do it when the completions are quick to generate.
 	</description>
 
 	<group main="cached-completion">
@@ -59,6 +65,10 @@ To enable completions for &quot;my-command&quot;:
     <implementation id="sha1new=2a96664db81de4f29c058b6db1c0b5ff718bc391" released="2010-08-07" version="0.1.4">
       <manifest-digest sha256="36ebdc8a01da596e4190bc11bf381c355bfc1dd04ff772827548dcd8d9d8b44c"/>
       <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.4.tgz" size="1956"/>
+    </implementation>
+    <implementation id="sha1new=40adca916dbbaf19216a74877eba69bc10b97b1a" released="2010-08-13" version="0.1.5">
+      <manifest-digest sha256="6edbcdcd35b60214a37c94f51a2286f4c1158c0ac26aa541f05dbfe6ddc35cb6"/>
+      <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.5.tgz" size="2059"/>
     </implementation>
 	</group>
 </interface>

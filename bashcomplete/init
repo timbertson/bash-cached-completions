@@ -3,25 +3,25 @@
 if [ -z "$1" ]; then
 	echo "ERROR: please supply a path to the cached-completion init script" 1>&2
 else
-	[ -n "$2" ] && bash_cached_completions_dir="$2"
-	_bash_cached_completions_script="$1"
-	function _bash_cached_completions {
+	[ -n "$2" ] && bashcomplete_config_dir="$2"
+	_bashcomplete_cached_script="$1"
+	function _bashcomplete_cached {
 		COMPREPLY=()
-		words=$(${_bash_cached_completions_script} "$COMP_CWORD" "${COMP_WORDS[@]}" 2>/tmp/cache_completions.log)
+		words=$(${_bashcomplete_cached_script} "$COMP_CWORD" "${COMP_WORDS[@]}" 2>/tmp/bashcomplete.log)
 		COMPREPLY=( $(compgen -W "${words}" -- ${COMP_WORDS[COMP_CWORD]}) )
 		return 0
 	}
 
-	[ -n "$bash_cached_completions_dir" ] || bash_cached_completions_dir=~/.config/bashcomplete
-	export bash_cached_completions_dir
-	function _bash_cached_completions_init {
-		for f in $bash_cached_completions_dir/*.py; do
+	[ -n "$bashcomplete_config_dir" ] || bashcomplete_config_dir=~/.config/bashcomplete
+	export bashcomplete_config_dir
+	function _bashcomplete_cached_init {
+		for f in $bashcomplete_config_dir/*.py; do
 			local filename command
 			filename=${f##*/}
 			command=${filename/%.py/}
-			complete -f -F _bash_cached_completions $command
+			complete -f -F _bashcomplete_cached $command
 		done
 	}
 
-	_bash_cached_completions_init
+	_bashcomplete_cached_init
 fi
