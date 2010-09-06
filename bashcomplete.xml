@@ -3,6 +3,7 @@
 <interface uri="http://gfxmonk.net/dist/0install/bashcomplete.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
 	<name>bash-cached-completions</name>
 	<summary>cached completions for bash</summary>
+	<homepage>http://github.com/gfxmonk/bash-cached-completions</homepage>
 	<description>
 To enable, put the following in your bashrc:
 
