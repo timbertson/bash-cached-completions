@@ -7,8 +7,10 @@ else
 	_bashcomplete_cached_script="$1"
 	function _bashcomplete_cached {
 		COMPREPLY=()
-		words=$(${_bashcomplete_cached_script} "$COMP_CWORD" "${COMP_WORDS[@]}" 2>/tmp/bashcomplete.log)
-		COMPREPLY=( $(compgen -W "${words}" -- ${COMP_WORDS[COMP_CWORD]}) )
+		echo "${COMP_WORDS[$COMP_CWORD]}" > /tmp/x
+		reply=( $(${_bashcomplete_cached_script} $COMP_CWORD "${COMP_WORDS[@]}" 2>/tmp/bashcomplete.log) )
+		COMPREPLY=( $(compgen -W "${reply[*]}" -- "${COMP_WORDS[$COMP_CWORD]}") )
+		echo "${COMPREPLY[@]}" > /tmp/reply
 		return 0
 	}
 

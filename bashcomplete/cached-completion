@@ -34,43 +34,46 @@ def get_words(command, args):
 	blocking = getattr(config, 'blocking', False)
 	get_words = config.get_words
 
-	cached_words_path = os.path.join(cache_dir, command, b32encode(cache_key))
-	try:
-		lastmod = os.stat(cached_words_path).st_mtime
-	except OSError:
-		lastmod = 0
+	if max_age == 0:
+		# never mind with all the forking, just do it synchronously
+		words = get_words(command, args)
+	else:
+		cached_words_path = os.path.join(cache_dir, command, b32encode(cache_key))
+		try:
+			lastmod = os.stat(cached_words_path).st_mtime
+		except OSError:
+			lastmod = 0
 
-	if not os.path.exists(cached_words_path):
-		make_dir(cache_dir)
-		make_dir(os.path.join(cache_dir, command))
-		open(cached_words_path, 'w').close()
-	
-	words = get_cached_words(cached_words_path)
-
-	if lastmod + max_age < time.time():
-		child_pid = os.fork()
-		if child_pid == 0:
-			print >> sys.stderr, "generating new set of words"
-			# close off stdout so bash doesn't wait for this child
-			sys.stdout.close()
-			os.close(1)
-			sys.stdout = sys.stderr
-			f = open(cached_words_path + '.lck', 'w')
-			try:
-				fcntl.flock(f.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-			except IOError: os._exit(1)
-			new_words = get_words(command, args)
-			output = open(cached_words_path, 'w')
-			output.writelines((line + '\n' for line in new_words))
-			output.close()
-			f.close()
-			os._exit(0)
-		if blocking:
-			print >> sys.stderr, "waiting"
-			os.waitpid(child_pid, 0)
-			words = get_cached_words(cached_words_path)
-	
-	print >> sys.stderr, repr(words)
+		if not os.path.exists(cached_words_path):
+			make_dir(cache_dir)
+			make_dir(os.path.join(cache_dir, command))
+			open(cached_words_path, 'w').close()
+		
+		words = get_cached_words(cached_words_path)
+		if lastmod + max_age < time.time():
+			child_pid = os.fork()
+			if child_pid == 0:
+				print >> sys.stderr, "generating new set of words"
+				# close off stdout so bash doesn't wait for this child
+				sys.stdout.close()
+				os.close(1)
+				sys.stdout = sys.stderr
+				f = open(cached_words_path + '.lck', 'w')
+				try:
+					fcntl.flock(f.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+				except IOError: os._exit(1)
+				new_words = get_words(command, args)
+				output = open(cached_words_path, 'w')
+				output.writelines((line + '\n' for line in new_words))
+				output.close()
+				f.close()
+				os._exit(0)
+			if blocking:
+				print >> sys.stderr, "waiting"
+				os.waitpid(child_pid, 0)
+				words = get_cached_words(cached_words_path)
+		
+	print >> sys.stderr, "ALL WORDS: " + repr(words)
 	return words or []
 
 
@@ -86,9 +89,12 @@ def get_cached_words(path):
 
 def main(idx, command, *args):
 	idx = int(idx) - 1
-	args = args[:idx+1]
-	words = get_words(command, args)
-	print "".join(words)
+	words = get_words(command, args[:idx+1])
+	from bashcomplete import compreply
+	print >> sys.stderr, "INPUTS: " + repr((idx, command, args))
+	words = words + compreply.concat_colons(words, idx, args)
+	print >> sys.stderr, "EXPANDED WORDS: " + repr(words)
+	print " ".join(words)
 
 if __name__ == '__main__':
 	if sys.argv[1:] == ['__init']:
