@@ -5,25 +5,33 @@ if [ -z "$1" ]; then
 else
 	[ -n "$2" ] && bashcomplete_config_dir="$2"
 	_bashcomplete_cached_script="$1"
-	function _bashcomplete_cached {
-		COMPREPLY=()
-		echo "${COMP_WORDS[$COMP_CWORD]}" > /tmp/x
-		reply=( $(${_bashcomplete_cached_script} $COMP_CWORD "${COMP_WORDS[@]}" 2>/tmp/bashcomplete.log) )
-		COMPREPLY=( $(compgen -W "${reply[*]}" -- "${COMP_WORDS[$COMP_CWORD]}") )
-		echo "${COMPREPLY[@]}" > /tmp/reply
-		return 0
-	}
 
 	[ -n "$bashcomplete_config_dir" ] || bashcomplete_config_dir=~/.config/bashcomplete
 	export bashcomplete_config_dir
 	function _bashcomplete_cached_init {
 		for f in $bashcomplete_config_dir/*.py; do
-			local filename command
-			filename=${f##*/}
-			command=${filename/%.py/}
-			complete -f -F _bashcomplete_cached $command
+			local filename=${f##*/}
+			local command=${filename/%.py/}
+			eval "$1 _bashcomplete_cached $command"
 		done
 	}
 
-	_bashcomplete_cached_init
+	if [ -n "$BASH" ]; then
+		_bashcomplete_cached_init "complete -f -F"
+		function _bashcomplete_cached {
+			COMPREPLY=()
+			reply=( $(${_bashcomplete_cached_script} $COMP_CWORD "${COMP_WORDS[@]}" 2>/tmp/bashcomplete.log) )
+			COMPREPLY=( $(compgen -W "${reply[*]}" -- "${COMP_WORDS[$COMP_CWORD]}") )
+		}
+	fi
+
+	if [ -n "$ZSH_VERSION" ]; then
+		_bashcomplete_cached_init "compctl -f -K"
+		function _bashcomplete_cached {
+			read -cA COMP_WORDS
+			read -cn COMP_CWORD
+			reply=()
+			reply=( $(${_bashcomplete_cached_script} $((COMP_CWORD - 1)) ${COMP_WORDS[@]} 2>/tmp/bashcomplete.log) )
+		}
+	fi
 fi

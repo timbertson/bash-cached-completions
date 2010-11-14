@@ -88,12 +88,26 @@ def get_cached_words(path):
 		return None
 
 def main(idx, command, *args):
+	bash = os.environ.get('BASH', False)
+	zsh = os.environ.get('ZSH_VERSION', False)
+
 	idx = int(idx) - 1
-	words = get_words(command, args[:idx+1])
-	from bashcomplete import compreply
+	command = command.strip()
 	print >> sys.stderr, "INPUTS: " + repr((idx, command, args))
-	words = words + compreply.concat_colons(words, idx, args)
-	print >> sys.stderr, "EXPANDED WORDS: " + repr(words)
+
+	current_word = args[:idx+1]
+	words = get_words(command, current_word)
+
+	import compreply
+	if bash:
+		# bash completion is broken in various ways. This is a fix for
+		# one of those ways
+		words = words + compreply.concat_colons(words, idx, args)
+		print >> sys.stderr, "EXPANDED WORDS: " + repr(words)
+	if zsh:
+		# zsh gives us sane input, so we can actually perform matching in python:
+		words = compreply.filter_matches(words, current_word)
+	print >> sys.stderr, "REPLY: " + repr(words)
 	print " ".join(words)
 
 if __name__ == '__main__':
