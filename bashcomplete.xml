@@ -71,5 +71,9 @@ only do it when the completions are quick to generate.
       <manifest-digest sha256="6edbcdcd35b60214a37c94f51a2286f4c1158c0ac26aa541f05dbfe6ddc35cb6"/>
       <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.5.tgz" size="2059"/>
     </implementation>
+    <implementation id="sha1new=88228f4ab005c80fe69ee8659f862c17114d5db6" released="2010-11-13" version="0.1.6">
+      <manifest-digest sha256="a68b46dc4312a66398634832c26e75e266f23be3b894082087d99dd72ec83223"/>
+      <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.6.tgz" size="4332"/>
+    </implementation>
 	</group>
 </interface>
