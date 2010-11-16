@@ -17,10 +17,10 @@ else
 	}
 
 	if [ -n "$BASH" ]; then
-		_bashcomplete_cached_init "complete -f -F"
+		_bashcomplete_cached_init "complete -F"
 		function _bashcomplete_cached {
 			COMPREPLY=()
-			reply=( $(${_bashcomplete_cached_script} $COMP_CWORD "${COMP_WORDS[@]}" 2>/tmp/bashcomplete.log) )
+			reply=( $(export BASH; ${_bashcomplete_cached_script} $COMP_CWORD "${COMP_WORDS[@]}" 2>/tmp/bashcomplete.log) )
 			COMPREPLY=( $(compgen -W "${reply[*]}" -- "${COMP_WORDS[$COMP_CWORD]}") )
 		}
 	fi
@@ -31,7 +31,7 @@ else
 			read -cA COMP_WORDS
 			read -cn COMP_CWORD
 			reply=()
-			reply=( $(${_bashcomplete_cached_script} $((COMP_CWORD - 1)) ${COMP_WORDS[@]} 2>/tmp/bashcomplete.log) )
+			reply=( $(export ZSH_VERSION; ${_bashcomplete_cached_script} $((COMP_CWORD - 1)) ${COMP_WORDS[@]} 2>/tmp/bashcomplete.log) )
 		}
 	fi
 fi
