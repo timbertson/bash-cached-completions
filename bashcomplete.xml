@@ -5,75 +5,40 @@
 	<summary>cached completions for bash</summary>
 	<homepage>http://github.com/gfxmonk/bash-cached-completions</homepage>
 	<description>
-To enable, put the following in your bashrc:
-
-. $(0launch http://gfxmonk.net/dist/0install/bashcomplete.xml __init)
-
-An easy way to generate a set of bash completion words.
-Word sets are cached, and generated in the background (so
-your terminal doesn't hang).
-
-The config is all written in python, because python is ace.
-Every set of words is tied to the cache_key you generate -
-if you return the same cache_key, the completion will re-use
-the same set of words. If completion depends on existing
-arguments, you will need to factor that into your cache_key
-generation.
-
-Example setup:
-To enable completions for &quot;my-command&quot;:
-
------------------------------------------
-~/.config/bashcomplete/my-command.py:
-
-	max_age = 5 * 60 # 5 minutes
-
-	def cache_key(command, args):
-		import os
-		return os.getcwd()
-
-	def get_words(command, args):
-		import time
-		time.sleep(2) # won't lock bash
-		return ['aaa','bbbb','cccc', 'ccdd']
------------------------------------------
-
-you can also set &quot;blocking = True&quot; in your config script if you always
-want bash to wait while new completions are being generated. WARNING: this
-will lock up your shell until the completions are retrieved, so you should
-only do it when the completions are quick to generate.
+see http://gfxmonk.net/dist/0install/bashcomplete.xml
 	</description>
-
 	<group main="cached-completion">
+		<environment insert="" mode="prepend" name="PYTHONPATH"/>
 		<implementation id="sha1new=2e7fc5ff211ce36d790d02b9e28ef44f8a1200e2" released="2010-06-13" version="0.1">
 			<manifest-digest sha256="ae283f8e5ed41f084650465948b81a2221b77a9c2413f65e8967350882c881bc"/>
 			<archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.tgz" size="1398"/>
 		</implementation>
 		<implementation id="sha1new=3f917886660e0a3db895dd9e059fe1581aef010d" released="2010-07-28" version="0.1.1">
-    <manifest-digest sha256="541aac253c4072458447add5350837c4734e20b0c2feffc8ad06ae1136eff1af"/>
-    <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.1.tgz" size="1489"/>
-  </implementation>
+			<manifest-digest sha256="541aac253c4072458447add5350837c4734e20b0c2feffc8ad06ae1136eff1af"/>
+			<archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.1.tgz" size="1489"/>
+		</implementation>
 		<implementation id="sha1new=f4fa7bdf5d6f78a8a37ae578336aa1a213cd3977" released="2010-07-29" version="0.1.2">
-    <manifest-digest sha256="0db35e7584e1a6a224742a95e586bdaed3295b736ccbc6221368afe2085c6095"/>
-    <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.2.tgz" size="1429"/>
-  </implementation>
+			<manifest-digest sha256="0db35e7584e1a6a224742a95e586bdaed3295b736ccbc6221368afe2085c6095"/>
+			<archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.2.tgz" size="1429"/>
+		</implementation>
 		<implementation id="sha1new=5de5bfc6b9d78fe79a7c7fdbb511d183dde13304" released="2010-07-31" version="0.1.3">
-    <manifest-digest sha256="4a49229475e427e999f93d6e605b5899872c1dfb8dca54aeaade744cfd90d14e"/>
-    <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.3.tgz" size="1438"/>
-  </implementation>
+			<manifest-digest sha256="4a49229475e427e999f93d6e605b5899872c1dfb8dca54aeaade744cfd90d14e"/>
+			<archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.3.tgz" size="1438"/>
+		</implementation>
 	</group>
 	<group main="bashcomplete/cached-completion">
-    <implementation id="sha1new=2a96664db81de4f29c058b6db1c0b5ff718bc391" released="2010-08-07" version="0.1.4">
-      <manifest-digest sha256="36ebdc8a01da596e4190bc11bf381c355bfc1dd04ff772827548dcd8d9d8b44c"/>
-      <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.4.tgz" size="1956"/>
-    </implementation>
-    <implementation id="sha1new=40adca916dbbaf19216a74877eba69bc10b97b1a" released="2010-08-13" version="0.1.5">
-      <manifest-digest sha256="6edbcdcd35b60214a37c94f51a2286f4c1158c0ac26aa541f05dbfe6ddc35cb6"/>
-      <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.5.tgz" size="2059"/>
-    </implementation>
-    <implementation id="sha1new=88228f4ab005c80fe69ee8659f862c17114d5db6" released="2010-11-13" version="0.1.6">
-      <manifest-digest sha256="a68b46dc4312a66398634832c26e75e266f23be3b894082087d99dd72ec83223"/>
-      <archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.6.tgz" size="4332"/>
-    </implementation>
+		<environment insert="" mode="prepend" name="PYTHONPATH"/>
+		<implementation id="sha1new=2a96664db81de4f29c058b6db1c0b5ff718bc391" released="2010-08-07" version="0.1.4">
+			<manifest-digest sha256="36ebdc8a01da596e4190bc11bf381c355bfc1dd04ff772827548dcd8d9d8b44c"/>
+			<archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.4.tgz" size="1956"/>
+		</implementation>
+		<implementation id="sha1new=40adca916dbbaf19216a74877eba69bc10b97b1a" released="2010-08-13" version="0.1.5">
+			<manifest-digest sha256="6edbcdcd35b60214a37c94f51a2286f4c1158c0ac26aa541f05dbfe6ddc35cb6"/>
+			<archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.5.tgz" size="2059"/>
+		</implementation>
+		<implementation id="sha1new=88228f4ab005c80fe69ee8659f862c17114d5db6" released="2010-11-13" version="0.1.6">
+			<manifest-digest sha256="a68b46dc4312a66398634832c26e75e266f23be3b894082087d99dd72ec83223"/>
+			<archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.6.tgz" size="4332"/>
+		</implementation>
 	</group>
 </interface>
