@@ -9,6 +9,7 @@ else
 	[ -n "$bashcomplete_config_dir" ] || bashcomplete_config_dir=~/.config/bashcomplete
 	export bashcomplete_config_dir
 	function _bashcomplete_cached_init {
+		[ -d $bashcomplete_config_dir ] || return;
 		for f in $bashcomplete_config_dir/*.py; do
 			local filename=${f##*/}
 			local command=${filename/%.py/}
