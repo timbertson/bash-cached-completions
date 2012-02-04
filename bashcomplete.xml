@@ -89,5 +89,9 @@ To enable completions for "my-command":
 			<manifest-digest sha256="81c33c02900d50cce458e4f80a946d755369ca268c0a5e3a78bf69d6231fda16"/>
 			<archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.7.tgz" size="4434"/>
 		</implementation>
+		<implementation id="sha1new=72fab5604554d189baea115ea567df6202dc3480" released="2012-02-05" version="0.1.8">
+			<manifest-digest sha256="9ba390eec299b3186bc7176f14bc3ac7ff0185d90707a009548ba448c407b89e"/>
+			<archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.8.tgz" size="4500"/>
+		</implementation>
 	</group>
 </interface>
