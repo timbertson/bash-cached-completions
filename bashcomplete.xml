@@ -1,11 +1,56 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <?xml-stylesheet type='text/xsl' href='interface.xsl'?>
-<interface uri="http://gfxmonk.net/dist/0install/bashcomplete.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
+<interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface" uri="http://gfxmonk.net/dist/0install/bashcomplete.xml">
 	<name>bash-cached-completions</name>
 	<summary>cached completions for bash</summary>
 	<homepage>http://github.com/gfxmonk/bash-cached-completions</homepage>
 	<description>
-see http://gfxmonk.net/dist/0install/bashcomplete.xml
+An easy way to generate a set of bash completion words.
+Word sets are cached, and generated in the background (so
+your terminal doesn't hang).
+
+The config is all written in python, because python is ace.
+Every set of words is tied to the cache_key you generate -
+if you return the same cache_key, the completion will re-use
+the same set of words. If completion depends on existing
+arguments, you will need to factor that into your cache_key
+generation. Cache_keys need to be valid filenames, so
+b32encode can be useful.
+
+
+Example setup:
+To enable completions for "my-command":
+
+-----------------------------------------
+~/.config/bashcomplete/my-command.py:
+
+	max_age = 5 * 60 # 5 minutes
+
+	def cache_key(command, args):
+		import os
+		import base64
+		return base64.b32encode(os.getcwd())
+
+	def get_words(command, args):
+		import time
+		time.sleep(2) # won't lock bash
+		return ['aaa','bbbb','cccc', 'ccdd']
+
+-----------------------------------------
+~/.bashrc:
+
+	export PATH="$PATH:/path/to/bashcomplete"
+	. /path/to/bashcomplete/init
+
+
+(Or, if you're using 0install) :
+
+-----------------------------------------
+~/.bashrc:
+
+	. $(0launch -c http://gfxmonk.net/dist/0install/bashcomplete.xml __init)
+
+
 	</description>
 	<group main="cached-completion">
 		<environment insert="" mode="prepend" name="PYTHONPATH"/>
@@ -39,6 +84,10 @@ see http://gfxmonk.net/dist/0install/bashcomplete.xml
 		<implementation id="sha1new=88228f4ab005c80fe69ee8659f862c17114d5db6" released="2010-11-13" version="0.1.6">
 			<manifest-digest sha256="a68b46dc4312a66398634832c26e75e266f23be3b894082087d99dd72ec83223"/>
 			<archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.6.tgz" size="4332"/>
+		</implementation>
+		<implementation id="sha1new=948da550dc5c31985563a918f97608247febe30f" released="2011-02-19" version="0.1.7">
+			<manifest-digest sha256="81c33c02900d50cce458e4f80a946d755369ca268c0a5e3a78bf69d6231fda16"/>
+			<archive href="http://gfxmonk.net/dist/0install/bashcomplete/bashcomplete-0.1.7.tgz" size="4434"/>
 		</implementation>
 	</group>
 </interface>
