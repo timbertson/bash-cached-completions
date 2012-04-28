@@ -1,6 +1,7 @@
-# shells like dash can explode, so we restrict this to just known
+# shells like dash can explode, so we restrict this whole script to just known
 # good shells.
-[ -n "$BASH" -o -n "$ZSH_VERSION" ] || return
+[ -n "$PS1" ] || return
+[ -n "$BASH_VERSION" -o -n "$ZSH_VERSION" ] || return
 
 if [ -z "$1" ]; then
 	_bashcomplete_cached_script="$(dirname "$(readlink -f "$([ -n "${BASH_SOURCE[0]}" ] && echo "${BASH_SOURCE[0]}" || echo "$0")")")/cached-completion"
