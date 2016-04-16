@@ -1,3 +1,5 @@
+<img src="http://gfxmonk.net/dist/status/project/bash-cached-completions.png">
+
 An easy way to generate a set of bash completion words.
 Word sets are cached, and generated in the background (so
 your terminal doesn't hang).
